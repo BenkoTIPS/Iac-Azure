@@ -1,0 +1,8 @@
+
+bin
+obj
+.vs
+.terraform
+terraform.*
+deploy/terraform/.terraform.lock.hcl
+deploy/arm/Deployment.targets
