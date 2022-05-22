@@ -1,0 +1,80 @@
+{
+	// BENKOTIPS : My Razor Snippets
+	// SOURCE    : aspnetcoreraczor.json
+	"myEnv": {
+		"prefix": "myEnv",
+		"body": [
+			"<div class='alert alert-warning'>",
+			"\t<h3>Environment</h3>",
+			"\t<hr /><b>Machine:</b> @System.Environment.MachineName",
+			"\t<br /><b>OS:</b> @System.Environment.OSVersion",
+			"\t<br /><b>Framework:</b> @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription",
+			"</div>"
+		],
+		"description": "Display runtime enviornment information"
+	},
+	"config" : {
+		"prefix": "myConfig",
+		"body": [
+			"@using Microsoft.Extensions.Configuration",
+			"@inject IConfiguration Config"
+		],
+		"description": "Inject Configuration"
+	},
+	"dadJoke": {
+		"prefix": "myDadJoke",
+		"body": [
+			"<h2 class='alert fw-bold' style='background-color:lightblue' id='joke'></h2>",
+			"<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>",
+			"<script $ type='text/javascript'>",
+			"\t$(document).ready(function () {",
+			"\t\t$.ajax({",
+			"\t\t\ttype: 'GET',",
+			"\t\t\turl: 'https://icanhazdadjoke.com',",
+			"\t\t\tdataType: 'json',",
+			"\t\t\tsuccess: function (msg) {",
+			"\t\t\t\t$('#joke').html(msg.joke);",
+			"\t\t\t},",
+			"\t\t\terror: function (request, status, error) {",
+			"\t\t\t\t$('#joke').html('Error getting joke');",
+			"\t\t\t}",
+			"\t\t});",
+			"\t});",
+			"</script>"
+		],
+		"description": "display a dad joke"
+	},
+	"carousel" : {
+		"prefix": "myCarousel",
+		"body": [
+			"<div id='myCarousel' class='carousel slide text-center' data-ride='carousel'>",
+			"\t<div class='carousel-inner'>",
+			"\t\t<div class='carousel-item active'><img src='~/images/Picture1.png' style='height:200px;' /></div>",
+			"\t\t<div class='carousel-item'><img src='~/images/Picture2.png' style='height:200px;' /></div>",
+			"\t\t<div class='carousel-item'><img src='~/images/Picture3.png' style='height:200px;' /></div>",
+			"\t</div>",
+			"</div>"
+		],
+		"description": "Bootstrap Carousel"
+	},
+	"catpic":{
+		"prefix": "myCatPic",
+		"body": [
+			"<img src='test' alt='catpic' id='catpic' />",
+			"<script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>",
+			"<script type='text/javascript'>",
+			" $(document).ready(function () {",
+			"\t$.ajax({",
+			"\t\ttype: 'GET',",
+			"\t\turl: 'https://api.thecatapi.com/v1/images/search',",
+			"\t\tdataType: 'json',",
+			"\t\tsuccess: function (rc) {",
+			"\t\t\t$('#catpic')[0].src = rc[0].url;",
+			"\t\t}",
+			"\t});",
+			"});",
+			"</script>"	
+		],
+		"description": "cat pic api"
+	}
+}	

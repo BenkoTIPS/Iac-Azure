@@ -1,0 +1,72 @@
+{
+	// BENKOTIPS : My ARM Snippets
+	// SOURCE    : arm-template.json
+	"myVar" : {
+		"prefix": "my-param",
+		"body": "\"${1:parameter}\" : { \"type\" : \"${2:string}\"}"
+	},
+	"myLinuxSite" : {
+		"prefix":"my-linux-site",
+		"body": [
+			"{",
+			"\t\"name\": \"${1:siteName}\",",
+			"\t\"type\": \"Microsoft.Web/sites\",",
+			"\t\"apiVersion\": \"2020-12-01\",",
+			"\t\"location\": \"[resourceGroup().location]\",",
+			"\t\"kind\":\"linux,app\",",
+			"\t\"tags\": {",
+			"\t\t\"[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', '${2:hostName}')]\": \"Resource\",",
+			"\t\t\"displayName\": \"${1:siteName}\"",
+			"\t},",
+			"\t\"dependsOn\": [",
+			"\t\t\"[resourceId('Microsoft.Web/serverfarms', '${2:hostName}')]\"",
+			"\t],",
+			"\t\"properties\": {",
+			"\t\t\"name\": \"${1:siteName}\",",
+			"\t\t\"serverFarmId\": \"[resourceId('Microsoft.Web/serverfarms', '${2:hostName}')]\"",
+			"\t},",
+			"\t\"resources\": [$3]",
+			"}"
+		]
+	},
+	"myLinuxPlan" : {
+		"prefix": "my-linux-plan",
+		"body": [
+			"{",
+			"\t\"name\": \"${1:hostName}\",",
+			"\t\"type\": \"Microsoft.Web/serverfarms\",",
+			"\t\"apiVersion\": \"2020-12-01\",",
+			"\t\"location\": \"[resourceGroup().location]\",",
+			"\t\"kind\":\"app,linux\",",
+			"\t\"sku\": {",
+			"\t\t\"name\": \"S1\",",
+			"\t\t\"capacity\": 1",
+			"\t},",
+			"\t\"properties\": {",
+			"\t\t\"reserved\": true",
+			"\t}",
+			"}",
+		]
+	},
+	"myAppConfig":{
+		"prefix": "my-app-config",
+		"body": [
+			"{",
+			"\t\"name\": \"appsettings\",",
+			"\t\"type\": \"config\",",
+			"\t\"location\": \"resourceGroup().location\",",
+			"\t\"apiVersion\": \"2015-08-01\",",
+			"\t\"dependsOn\": [",
+			"\t\t\"[resourceId('Microsoft.Web/sites', ${1:siteName})]\"",
+			"\t],",
+			"\t\"tags\": {",
+			"\t\t\"displayName\": \"config\"",
+			"\t},",
+			"\t\"properties\": {",
+			"\t\t\"${2:Key-1}\": \"${3:Value}\",",
+			"\t\t\"${4:Key-2}\": \"${5:Value}\"",
+			"\t}",
+			"}",
+		]
+	}
+}

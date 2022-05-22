@@ -1,0 +1,78 @@
+{
+	// BENKOTIPS : My Terraform Snippets
+	// SOURCE    : terraform.json
+	"my-tf-var" : {
+		"prefix": "my-tf-var",
+		"body": "variable ${1:varName} {}"
+	},
+	"my-tf-providers" : {
+		"prefix": "my-tf-provider",
+		"body": [
+			"terraform {",
+			"\trequired_providers {",
+			"\t\tazurerm = {",
+			"\t\t\tsource = \"hashicorp/azurerm\"",
+			"\t\t\tversion = \">= 2.0\"",
+			"\t\t}",
+			"\t}",
+			"\trequired_version = \">= 0.14.9\"",
+			"}",
+			"",
+			"provider \"azurerm\" {",
+			"\tfeatures {}",
+			"}",
+			"",
+			"data \"azurerm_client_config\" \"current\" {}",
+		],
+		"description": "Azure Terraform Provider"
+	},
+	"my-tf-rg" : {
+		"prefix": "my-tf-rg",
+		"body": [
+			"resource \"azurerm_resource_group\" \"${1:rg}\" {",
+			"\tname = \"${2:rgName}\"",
+			"\tlocation = \"${3:centralus}\"",
+			"}",
+		]
+	},
+	"my-tf-linux-plan" :{
+		"prefix": "my-tf-linux-plan",
+		"body": [
+			"resource \"azurerm_app_service_plan\" \"${1:plan}\" {",
+			"\tname                = \"${2:planName}\"",
+			"\tlocation            = azurerm_resource_group.rg.location",
+			"\tresource_group_name = azurerm_resource_group.rg.name",
+			"\tkind                = \"Linux\"",
+			"\treserved            = true",
+			"\tsku {",
+			"\t  tier = \"Standard\"",
+			"\t  size = \"S1\"",
+			"\t}",
+			"}"
+		]
+	},
+	"my-tf-linux-web-site" : {
+		"prefix": "my-tf-linux-web-site",
+		"body": [
+			"resource \"azurerm_app_service\" \"${1:myApp}\" {",
+			"\tname                = \"${2:siteName}\"",
+			"\tlocation            = azurerm_resource_group.rg.location",
+			"\tresource_group_name = azurerm_resource_group.rg.name",
+			"\tapp_service_plan_id = azurerm_app_service_plan.plan.id",
+			"\t",
+			"\tsite_config {",
+			"\t\tlinux_fx_version = \"DOTNETCORE|6.0\"",
+			"\t\tapp_command_line = \"dotnet ${3:myName}.dll\"",
+			"\t}",
+			"\t",
+			"\tapp_settings = {",
+			"\t\t\"${4:Key}\" = \"${5:Value}\"",
+			"\t\t\"${6:Key}\" = \"${7:Value}\"",
+			"\t}",
+			"\tidentity {",
+			"\t\ttype = \"SystemAssigned\"",
+			"\t}",
+			"}",
+			]
+	}
+}
