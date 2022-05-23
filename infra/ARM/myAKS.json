@@ -1,0 +1,89 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "type": "string",
+            "metadata": {
+                "description": "Application Name"
+            }
+        },
+        "envName": {
+            "type": "string",
+            "defaultValue": "bnk",
+            "metadata": {
+                "description": "Name of Environment"
+            }
+        },
+        "myLoc": {
+            "type": "string",
+            "defaultValue" : "[resourceGroup().location]",
+            "metadata": {
+                "description": "Deploy location"
+            }
+        },
+        "myGuid": {
+            "type": "string",
+            "defaultValue": "[newGuid()]"
+        }
+        
+    },
+    "functions": [],
+    "variables": {
+        "prefix": "[concat(parameters('envName'),'-',parameters('appName'))]",
+        "clusterName": "[concat(variables('prefix'),'-aks')]",
+        "acrName": "[tolower(concat(parameters('envName'),parameters('appName'),'acs'))]",
+        "location": "[parameters('myLoc')]"
+
+    },
+    "resources": [
+        {
+            "name": "[variables('clusterName')]",
+            "type": "Microsoft.ContainerService/managedClusters",
+            "apiVersion": "2021-05-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "kubernetesVersion": "1.22.4",
+                "dnsPrefix": "dnsprefix",
+                "nodeResourceGroup": "[concat(resourceGroup().name,'-nodes')]",
+                "agentPoolProfiles": [
+                    {
+                        "name": "agentpool",
+                        "count": 2,
+                        "vmSize": "Standard_ds2",
+                        "osType": "Linux",
+                        "mode": "System"
+                    }
+                ]
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        },
+        {
+            "name": "[variables('acrName')]",
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2019-05-01",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "adminUserEnabled": true
+            }
+        },
+        {
+            "apiVersion": "2018-09-01-preview",
+            "type": "Microsoft.ContainerRegistry/registries/providers/roleAssignments",
+            "name": "[concat(variables('acrName'), '/Microsoft.Authorization/', parameters('myGuid'))]",
+            "properties": {
+                "principalId": "[reference(variables('clusterName'), '2021-07-01').identityProfile.kubeletidentity.objectId]",
+                "principalType": "ServicePrincipal",
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "scope": "[resourceId(resourceGroup().name,'Microsoft.ContainerRegistry/registries/', variables('acrName'))]"
+            }
+        }
+
+    ],
+    "outputs": {}
+}
