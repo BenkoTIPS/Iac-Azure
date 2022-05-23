@@ -9,3 +9,7 @@
 [Ll]og/
 [Ll]ogs/
 
+.terraform/*
+.terraform*
+*.tfstate
+
