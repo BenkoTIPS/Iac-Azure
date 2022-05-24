@@ -1,5 +1,9 @@
 param appName string
 param envName string
+param color string
+
+@secure()
+param secret string
 
 var prefix = '${envName}-${appName}'
 var siteName_var = '${prefix}-site'
@@ -40,7 +44,8 @@ resource siteName_appsettings 'Microsoft.Web/sites/config@2015-08-01' = {
     displayName: 'config'
   }
   properties: {
-    EnvName: 'Bicep'
-    FavoriteColor: 'lightblue'
+    EnvName: envName
+    FavoriteColor: color
+    Secret: secret
   }
 }

@@ -2,6 +2,10 @@
 param appName string
 param envName string
 param myLocation string = 'centralus'
+param color string
+@secure()
+param secret string
+
 
 targetScope = 'subscription'
 
@@ -16,6 +20,8 @@ module site 'mysite.bicep' = {
   params: {
     appName: appName
     envName: envName
+    secret: secret
+    color: color
   }
 }
 

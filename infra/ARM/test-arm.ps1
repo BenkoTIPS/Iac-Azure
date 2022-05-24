@@ -35,4 +35,4 @@ $arm_rg_name = $outputs.rgName.value
 az webapp deployment source config-zip --resource-group $arm_rg_name --name $arm_site_name --src ..\..\Publish\myApp.zip
 
 ## Decompile Bicep File from source ARM
-az bicep decompile -f .\MyWebSite.json
+az bicep decompile -f .\mySite.json
